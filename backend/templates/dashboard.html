@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}Dashboard | NexusConstruction{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
+{% block content %}
+<div class="stats-grid">
+  <div class="stat-card">
+    <div class="stat-label">Total Buildprojects</div>
+    <div class="stat-value">{{ buildproject_count }}</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Total Buildtasks</div>
+    <div class="stat-value" style="background:linear-gradient(135deg,#10b981,#06b6d4);-webkit-background-clip:text;background-clip:text">{{ buildtask_count }}</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Total Materials</div>
+    <div class="stat-value" style="background:linear-gradient(135deg,#f59e0b,#f97316);-webkit-background-clip:text;background-clip:text">{{ material_count }}</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Total Budget</div>
+    <div class="stat-value" style="background:linear-gradient(135deg,#ef4444,#ec4899);-webkit-background-clip:text;background-clip:text">{{ buildproject_total_budget|floatformat:0 }}</div>
+  </div>
+</div>
+
+<div class="card">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
+    <h3>Recent Buildprojects</h3>
+    <a href="/buildprojects/create/" class="btn btn-primary btn-sm">+ New BuildProject</a>
+  </div>
+  {% if recent %}
+  <table>
+    <thead>
+      <tr><th>Name</th><th>Client</th><th>Location</th><th>Budget</th><th>Spent</th><th>Created</th></tr>
+    </thead>
+    <tbody>
+      {% for r in recent %}
+      <tr>
+        <td><a href="/buildprojects/{{ r.pk }}/edit/">{{ r.name }}</a></td>
+        <td>{{ r.client|default:"-" }}</td><td>{{ r.location|default:"-" }}</td><td>{{ r.budget|floatformat:2 }}</td><td>{{ r.spent|floatformat:2 }}</td><td style="color:var(--muted)">{{ r.created_at|date:"M d, Y" }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <div class="empty">
+    <p>No records yet.</p>
+    <a href="/buildprojects/create/" class="btn btn-primary" style="margin-top:1rem">Create First BuildProject</a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}
