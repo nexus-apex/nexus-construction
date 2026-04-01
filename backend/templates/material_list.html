@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}Materials | NexusConstruction{% endblock %}
+{% block page_title %}Materials{% endblock %}
+{% block content %}
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;flex-wrap:wrap;gap:1rem">
+  <form class="search-bar" method="get" style="flex:1;margin-bottom:0">
+    <input type="text" name="search" value="{{ search }}" placeholder="Search materials...">
+    <select name="status" onchange="this.form.submit()">
+      <option value="">All Category</option>
+      <option value="cement" {% if status_filter == 'cement' %}selected{% endif %}>Cement</option>
+      <option value="steel" {% if status_filter == 'steel' %}selected{% endif %}>Steel</option>
+      <option value="brick" {% if status_filter == 'brick' %}selected{% endif %}>Brick</option>
+      <option value="sand" {% if status_filter == 'sand' %}selected{% endif %}>Sand</option>
+      <option value="wood" {% if status_filter == 'wood' %}selected{% endif %}>Wood</option>
+      <option value="electrical" {% if status_filter == 'electrical' %}selected{% endif %}>Electrical</option>
+      <option value="plumbing" {% if status_filter == 'plumbing' %}selected{% endif %}>Plumbing</option>
+    </select>
+    <button type="submit" class="btn btn-primary btn-sm">Search</button>
+  </form>
+  <a href="/materials/create/" class="btn btn-primary">+ New Material</a>
+</div>
+
+<div class="card">
+  {% if records %}
+  <table>
+    <thead>
+      <tr><th>Name</th><th>Category</th><th>Quantity</th><th>Unit</th><th>Unit Cost</th><th>Actions</th></tr>
+    </thead>
+    <tbody>
+      {% for r in records %}
+      <tr>
+        <td><a href="/materials/{{ r.pk }}/edit/"><strong>{{ r.name }}</strong></a></td>
+        <td><span class="badge badge-blue">{{ r.get_category_display }}</span></td>
+        <td>{{ r.quantity|default:"-" }}</td>
+        <td>{{ r.unit|default:"-" }}</td>
+        <td>{{ r.unit_cost|floatformat:2 }}</td>
+        <td class="actions">
+          <a href="/materials/{{ r.pk }}/edit/" class="btn btn-primary btn-sm">Edit</a>
+          <form method="post" action="/materials/{{ r.pk }}/delete/" style="display:inline" onsubmit="return confirm('Delete?')">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger btn-sm">Del</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <div class="empty">
+    <p>No materials found.</p>
+    <a href="/materials/create/" class="btn btn-primary" style="margin-top:1rem">Create Material</a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}
