@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block title %}{% if editing %}Edit{% else %}New{% endif %} Material | NexusConstruction{% endblock %}
+{% block page_title %}{% if editing %}Edit Material{% else %}New Material{% endif %}{% endblock %}
+{% block content %}
+<div class="card" style="max-width:750px">
+  <form method="post">
+    {% csrf_token %}
+    <div class="form-row">
+      <div class="form-group">
+        <label>Name</label>
+        <input type="text" name="name" value="{{ record.name|default:'' }}">
+      </div>
+      <div class="form-group">
+        <label>Category</label>
+        <select name="category">
+          <option value="cement" {% if record.category == 'cement' %}selected{% endif %}>Cement</option>
+          <option value="steel" {% if record.category == 'steel' %}selected{% endif %}>Steel</option>
+          <option value="brick" {% if record.category == 'brick' %}selected{% endif %}>Brick</option>
+          <option value="sand" {% if record.category == 'sand' %}selected{% endif %}>Sand</option>
+          <option value="wood" {% if record.category == 'wood' %}selected{% endif %}>Wood</option>
+          <option value="electrical" {% if record.category == 'electrical' %}selected{% endif %}>Electrical</option>
+          <option value="plumbing" {% if record.category == 'plumbing' %}selected{% endif %}>Plumbing</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Quantity</label>
+        <input type="number" name="quantity" value="{{ record.quantity|default:'0' }}">
+      </div>
+      <div class="form-group">
+        <label>Unit</label>
+        <input type="text" name="unit" value="{{ record.unit|default:'' }}">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Unit Cost</label>
+        <input type="number" step="0.01" name="unit_cost" value="{{ record.unit_cost|default:'0' }}">
+      </div>
+      <div class="form-group">
+        <label>Supplier</label>
+        <input type="text" name="supplier" value="{{ record.supplier|default:'' }}">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Status</label>
+        <select name="status">
+          <option value="in_stock" {% if record.status == 'in_stock' %}selected{% endif %}>In Stock</option>
+          <option value="ordered" {% if record.status == 'ordered' %}selected{% endif %}>Ordered</option>
+          <option value="delivered" {% if record.status == 'delivered' %}selected{% endif %}>Delivered</option>
+        </select>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:0.75rem;margin-top:1rem">
+      <button type="submit" class="btn btn-primary">{% if editing %}Update{% else %}Create{% endif %} Material</button>
+      <a href="/materials/" class="btn" style="background:var(--border);color:var(--text)">Cancel</a>
+    </div>
+  </form>
+</div>
+{% endblock %}
